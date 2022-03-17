@@ -42,6 +42,6 @@ else # use XLM-Roberta Finetune from HUAWEI's submission to WMT2020
   source ${CONFIG}/roberta_filter_config.sh
   bash ${SCRIPT}/roberta_filter.sh
 fi
-exit
+
 # generate subsample file and bpe them
 bash ${SCRIPT}/filter/prep_score_data.sh ${filter_method}
