@@ -4,7 +4,10 @@ deduped_file=${aligned_dir}/train.${lang}-en
 filter_dir=${DATASET}/sentence-align-filter/${lang}/${alignment_type}/${filter_method}
 src_file=${filter_dir}/train.${lang}-en.${lang}
 tgt_file=${filter_dir}/train.${lang}-en.en
-
+if [[ -e "${filter_dir}/${lang}-en.score" ]]; then
+  echo "SBERT scoring file already computed"
+  exit
+fi
 mkdir -p ${filter_dir}
 # first we preprocess the deduped data with overlap and language id check
 cat ${deduped_file} | python $LASER_SCORING/filter-stdio.py --overlap 0.9 -l ${lang} -e en > ${deduped_file}.filter
