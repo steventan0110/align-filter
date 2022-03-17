@@ -7,9 +7,11 @@ tgt_file=${filter_dir}/train.${lang}-en.en
 
 mkdir -p ${filter_dir}
 # first we preprocess the deduped data with overlap and language id check
-cat ${deduped_file} | python $LASER_SCORING/filter-stdio.py --overlap 0.9 -l ${lang} -e en > ${deduped_file}.filter
+if [[ ! -e ${deduped_file}.filter ]]; then
+  cat ${deduped_file} | python $LASER_SCORING/filter-stdio.py --overlap 0.9 -l ${lang} -e en > ${deduped_file}.filter
+fi
 python ${ROOT}/util/align/preprocess.py --file ${deduped_file}.filter --output-dir ${filter_dir} --lang ${lang}
-
+conda activate align # have to use align because of transformer version issue
 Embed () {
   ll=$1
   txt=$2

@@ -3,8 +3,9 @@ deduped_file=${aligned_dir}/train.${lang}-en
 filter_dir=${DATASET}/sentence-align-filter/${lang}/${alignment_type}/${filter_method}
 src_file=${filter_dir}/train.${lang}-en.${lang}
 tgt_file=${filter_dir}/train.${lang}-en.en
+
 if [[ -e "${filter_dir}/${lang}-en.score" ]]; then
-  echo "LASER scoring file already computed"
+  echo "ROBERTA scoring file already computed"
   exit
 fi
 mkdir -p ${filter_dir}
@@ -58,3 +59,5 @@ python ${ROOT}/code/filter/filter.py \
     --src_data ${filter_dir}/train.${lang}-en.${lang}  \
     --trg_data ${filter_dir}/train.${lang}-en.en  \
     --output_dir ${filter_dir}
+# paste score file with txt
+paste ${filter_dir}/score.txt ${tgt_file} ${src_file} > ${filter_dir}/${lang}-en.score

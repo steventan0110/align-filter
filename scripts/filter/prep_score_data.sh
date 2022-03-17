@@ -104,11 +104,7 @@ fairseq_preprocess () {
   done
 }
 if [ ! -f ${output_dir}/ps-en.score ]; then
-  if [[ ${filter_method} == "roberta" ]]; then # finetune model's filter only give raw score
-    paste ${ROOT}/output/${lang}/${alignment_type}/scores.txt ${tgt_file} ${src_file} > ${output_dir}/ps-en.score
-  else
-    cp ${filter_dir}/ps-en.score ${output_dir}/ps-en.score
-  fi
+  cp ${filter_dir}/ps-en.score ${output_dir}/ps-en.score
 fi
 
 filter_corpus ${lang} ${output_dir}/ps-en.score ${output_dir}/train.ps-en
