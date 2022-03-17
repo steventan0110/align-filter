@@ -1,5 +1,6 @@
 # main script that controls alignment and filter
 # options for alignment (either use laser or finetuned sbert)
+
 ALIGN_METHOD=$1
 FILTER_METHOD=$2
 export lang=$3
@@ -8,6 +9,7 @@ echo "Executing ${ALIGN_METHOD} Align with ${FILTER_METHOD} Filtering for ${lang
 
 if [[ ${HOME} == '/home/wtan12' ]]; then
   echo "execute clsp environment"
+  source /home/gqin2/scripts/acquire-gpu
   source ~/miniconda3/etc/profile.d/conda.sh
   source ${HOME}/align-filter/scripts/config/clsp_config.sh
 else
