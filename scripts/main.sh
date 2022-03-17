@@ -39,7 +39,6 @@ if [[ ${FILTER_METHOD} == "LASER" ]]; then
   bash ${SCRIPT}/laser_filter.sh
 elif [[ ${FILTER_METHOD} == "SBERT" ]]; then
   filter_method=sbert
-  source ${CONFIG}/sbert_align_config.sh
   bash ${SCRIPT}/sbert_filter.sh
 else # use XLM-Roberta Finetune from HUAWEI's submission to WMT2020
   source ${CONFIG}/roberta_filter_config.sh

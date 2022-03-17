@@ -15,6 +15,11 @@ Embed () {
   txt=$2
   embed=$3
   # sbert embed
+  sbert_model_name='bert-base-multilingual-cased'
+  sbert_epochs=1
+  window_size=6
+  neg_samples=6
+  SBERT_CHECKPOINT_FOLDER=${CHECKPOINT}/align/${lang}/${sbert_model_name}-${sbert_epochs}-${window_size}-${neg_samples}
   python ${ROOT}/util/align/sbert_embed.py --input ${txt} --output ${embed} \
     --mode finetune --model-dir ${SBERT_CHECKPOINT_FOLDER}
 }
