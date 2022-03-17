@@ -9,15 +9,6 @@ if [[ -e "${filter_dir}/${lang}-en.score" ]]; then
   exit
 fi
 mkdir -p ${filter_dir}
-# first we preprocess the deduped data with overlap and language id check
-if true; then
-  cat ${deduped_file} | python $LASER_SCORING/filter-stdio.py --overlap 0.9 -l ${lang} -e en > ${deduped_file}.filter
-  python ${ROOT}/util/align/preprocess.py --file ${deduped_file}.filter --output-dir ${filter_dir} --lang ${lang}
-else
-  # debug purpose, realized that using unfiltered data will cuz laser embed error due to sequences that are longer than 512
-  cp ${aligned_dir}/train.${lang}-en.${lang} ${filter_dir}/train.${lang}-en.${lang}
-  cp ${aligned_dir}/train.${lang}-en.en ${filter_dir}/train.${lang}-en.en
-fi
 
 Embed () {
   ll=$1

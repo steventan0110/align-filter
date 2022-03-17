@@ -33,14 +33,27 @@ else
 fi
 
 conda activate crawl
+deduped_file=${aligned_dir}/train.${lang}-en
+if [[ ! -e ${deduped_file}.filter ]]; then # filter by lang id and coverage
+  cat ${deduped_file} | python $LASER_SCORING/filter-stdio.py --overlap 0.9 -l ${lang} -e en > ${deduped_file}.filter
+fi
+
+filter_illegal_sent() {
+  method=$1
+  filter_dir=${DATASET}/sentence-align-filter/${lang}/${alignment_type}/${method}
+  python ${ROOT}/util/align/preprocess.py --file ${deduped_file}.filter --output-dir ${filter_dir} --lang ${lang}
+}
+
 echo "perform sentence filtering on aligned file in ${aligned_dir}"
 if [[ ${FILTER_METHOD} == "LASER" ]]; then
-  filter_method=laser
+  filter_illegal_sent laser
   bash ${SCRIPT}/laser_filter.sh
 elif [[ ${FILTER_METHOD} == "SBERT" ]]; then
-  filter_method=sbert
+  conda activate align # need updatated transformers to run sbert_embed script
+  filter_illegal_sent sbert
   bash ${SCRIPT}/sbert_filter.sh
-else # use XLM-Roberta Finetune from HUAWEI's submission to WMT2020
+else # use XLM-Roberta Finetune from HUAWEI's submission to WMT2020, need crawl env because of legacy code
+  filter_illegal_sent roberta
   source ${CONFIG}/roberta_filter_config.sh
   bash ${SCRIPT}/roberta_filter.sh
 fi
