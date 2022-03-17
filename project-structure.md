@@ -1,0 +1,44 @@
+### Project Structure Description
+#### (Multiple different checkpoints and related projects are included in this repo and this file explains what each folder is used for)
+```
+- ROOT
+    - Checkpoint
+        - align
+            - finetuned_sbert folders (different configuration)
+        - evaluation
+            - ... downstream checkpoints trained using FLORES setup for different languages
+            - the path name includes info about "language id, learning rate, alignment method, filtering method"
+    - dataset
+        - document-align
+            - contains WMT release document level data, need to align them to get sentence-aligned parallel data
+        - sentence-align
+            - laser
+                - laser aligned data
+            - sbert
+                - finetuned sbert aligned data
+            - wmt
+                - wmt released data for parallel corpus
+        - sentence-align-filter
+            - similar structure to evaluation's checkpoint, the aligned data, after tokenization and bpe, becomes data file here
+            - these file are then preprocessed by fairseq to be load in to train downstream models
+    - data-bin
+        - same structure as checkpoint/evaluation or dataset/evaluation
+    - code
+        - align
+            - ... (alignment related codes)
+        - filter
+            - ... (filtering related codes)
+    - scripts
+        - align 
+            - ... (script for finetuning SBERT for alignment)
+            - ... (script for alignment)
+        - filter
+            - ... (script for filtering aligned sentences with LASER)
+            - ... (script for filtering aligned sentences with SBERT)
+            - ... (script for filtering aligned sentences with finetuned XLM-Roberta, including its finetuning scripts)
+        - config:
+            - ... configuration setup for different systems and align/filter options
+        - exp:
+            - export files, high level description of the methods
+            - these files are the entrance of execution        
+```
