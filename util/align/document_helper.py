@@ -36,6 +36,19 @@ def get_docs(buckets):
 			p.join()
 		return list(docs)
 
+def filter_long(en, other):
+	en_out = []
+	other_out = []
+	for en_sent in en.split('\n'):
+		line = en_sent.strip()
+		if len(line) < 1 or len(line) > 512: continue
+		en_out.append(line)
+	for other_sent in other.split('\n'):
+		line = other_sent.strip()
+		if len(line) < 1 or len(line) > 512: continue
+		other_out.append(line)
+	return en_out, other_out
+
 def main(args):
 	if args.mode == "decode":
 		bucket_size = args.n_cpu # parallelize the saving jobs
@@ -55,7 +68,7 @@ def main(args):
 			en_url, other_url, en, other = line.split('\t')
 			en = base64.b64decode(en).decode('utf-8')
 			other = base64.b64decode(other).decode('utf-8')
-			if len(en) > 512 or len(other) > 512: continue
+			en, other = filter_long(en, other)
 			en_doc_name = f"{args.output_dir}/{file_counter}.en"
 			other_doc_name = f"{args.output_dir}/{file_counter}.{args.lang}"
 			buckets[bucket_id][-1].append((en, other, en_doc_name, other_doc_name))
