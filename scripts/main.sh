@@ -32,13 +32,12 @@ else
   echo "do nothing for no alignment option" # this is using wmt released data
 fi
 
-conda actiavte crawl
+conda activate crawl
 echo "perform sentence filtering on aligned file in ${aligned_dir}"
 if [[ ${FILTER_METHOD} == "LASER" ]]; then
   filter_method=laser
   bash ${SCRIPT}/laser_filter.sh
 elif [[ ${FILTER_METHOD} == "SBERT" ]]; then
-  conda deactivate
   filter_method=sbert
   bash ${SCRIPT}/sbert_filter.sh
 else # use XLM-Roberta Finetune from HUAWEI's submission to WMT2020
