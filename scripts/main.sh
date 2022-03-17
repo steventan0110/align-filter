@@ -41,19 +41,23 @@ fi
 filter_illegal_sent() {
   method=$1
   filter_dir=${DATASET}/sentence-align-filter/${lang}/${alignment_type}/${method}
+  mkdir -p ${filter_dir}
   python ${ROOT}/util/align/preprocess.py --file ${deduped_file}.filter --output-dir ${filter_dir} --lang ${lang}
 }
 
 echo "perform sentence filtering on aligned file in ${aligned_dir}"
 if [[ ${FILTER_METHOD} == "LASER" ]]; then
+  filter_method=laser
   filter_illegal_sent laser
   bash ${SCRIPT}/laser_filter.sh
 elif [[ ${FILTER_METHOD} == "SBERT" ]]; then
-  conda activate align # need updatated transformers to run sbert_embed script
+  filter_method=sbert	
   filter_illegal_sent sbert
+  conda activate align # need updatated transformers to run sbert_embed script
   bash ${SCRIPT}/sbert_filter.sh
 else # use XLM-Roberta Finetune from HUAWEI's submission to WMT2020, need crawl env because of legacy code
   filter_illegal_sent roberta
+  filter_method=roberta
   source ${CONFIG}/roberta_filter_config.sh
   bash ${SCRIPT}/roberta_filter.sh
 fi
