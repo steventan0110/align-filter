@@ -37,7 +37,7 @@ else
     --warmup_steps 1000 \
     --num_train_epochs 2.0 \
     --gradient_accumulation_steps=4 \
-    --training_examples 100  \
+    --training_examples 10000  \
     --negative_random_sampling 8 \
     --fuzzy_ratio=0 \
     --fuzzy_max_score=60 \
