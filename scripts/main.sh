@@ -7,11 +7,11 @@ export lang=$3
 echo "Executing ${ALIGN_METHOD} Align with ${FILTER_METHOD} Filtering for ${lang}"
 
 if [[ ${HOME} == '/home/wtan12' ]]; then
-  # execute clsp environment
+  echo "execute clsp environment"
   source ~/miniconda3/etc/profile.d/conda.sh
   source ${HOME}/align-filter/scripts/config/clsp_config.sh
 else
-  # execute home environment
+  echo "execute home environment"
   source ~/anaconda3/etc/profile.d/conda.sh
   source ${HOME}/Code/GITHUB/align-filter/scripts/config/local_config.sh
 fi
