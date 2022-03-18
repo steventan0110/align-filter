@@ -109,7 +109,7 @@ class STFinetune:
 		self.window_size = 6
 		self.neg_samples = 6
 		self.epochs = epochs
-		self.batch_size = 4
+		self.batch_size = 2
 		self.num_samples = num_samples
 		# self.model_card = 'bert-base-uncased'
 		self.model_card = 'bert-base-multilingual-cased'
