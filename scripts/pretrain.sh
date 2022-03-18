@@ -6,7 +6,7 @@ source /home/gqin2/scripts/acquire-gpu
 source /home/wtan12/align-filter/scripts/config/clsp_config.sh
 conda activate crawl
 
-output_dir=${CHECKPOINT}/evaluation/${alignment_method}/${filter_method}-${sample}
+output_dir=${CHECKPOINT}/evaluation/${lang}/${alignment_method}/${filter_method}-${sample}
 mkdir -p  ${output_dir}
 fairseq-train ${DATABIN}/${lang}/${alignment_method}/${filter_method}-${sample} \
   --source-lang ${lang} --target-lang en \

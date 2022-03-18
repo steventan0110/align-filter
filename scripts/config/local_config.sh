@@ -19,3 +19,4 @@ export tokenizer=$moses_scripts/tokenizer/tokenizer.perl
 export clean=$moses_scripts/training/clean-corpus-n.perl
 export norm_punc=$moses_scripts/tokenizer/normalize-punctuation.perl
 export rem_non_print_char=$moses_scripts/tokenizer/remove-non-printing-char.perl
+export OUTPUT=${ROOT}/output

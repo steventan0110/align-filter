@@ -1,6 +1,7 @@
 """ create pseudo alignment using existing aligned data, mostly used as evaluation for finetuned model """
 import random
 import numpy as np
+import argparse
 np.random.seed(41)
 random.seed(41)
 import os
@@ -14,7 +15,8 @@ GROUP_SRC=1
 GROUP_TGT=2
 NOISE_SRC=3
 NOISE_TGT=4
-def main(dev_src_dir, dev_tgt_dir, train_src_dir, train_tgt_dir, output_dir):
+
+def main(dev_src_dir, dev_tgt_dir, train_src_dir, train_tgt_dir, output_dir, lang):
 	""" create alignment by randomly put some sentences together or inserting some noise """
 	dev_src_data = read_text(dev_src_dir)[:200] # only take a portion to save time
 	dev_tgt_data = read_text(dev_tgt_dir)[:200]
@@ -27,12 +29,12 @@ def main(dev_src_dir, dev_tgt_dir, train_src_dir, train_tgt_dir, output_dir):
 
 	possible_weights = [
 		[0.6,0.1,0.1,0.1,0.1], # all combined
-		[0.7,0.15,0.15,0,0], # only ins
-		[0.7,0,0,0.15,0.15], #only delete
-		[0.8,0.2,0,0,0], # ins on src only
-		[0.8,0,0.2,0,0], # ins on tgt only
-		[0.8,0,0,0.2,0], # delete on src only
-		[0.8,0,0,0,0.2] # delete on tgt only
+		# [0.7,0.15,0.15,0,0], # only ins
+		# [0.7,0,0,0.15,0.15], #only delete
+		# [0.8,0.2,0,0,0], # ins on src only
+		# [0.8,0,0.2,0,0], # ins on tgt only
+		# [0.8,0,0,0.2,0], # delete on src only
+		# [0.8,0,0,0,0.2] # delete on tgt only
 	]
 	for assigned_weight in possible_weights:
 		align_weight, ins_src_weight, ins_tgt_weight, delete_src_weight, delete_tgt_weight = assigned_weight
@@ -109,16 +111,16 @@ def main(dev_src_dir, dev_tgt_dir, train_src_dir, train_tgt_dir, output_dir):
 		# save file and
 		src_out = '\n'.join(src_sents) + '\n'
 		tgt_out = '\n'.join(tgt_sents) + '\n'
-		src_out_file = f'{cur_out_dir}/ps-en.ps'
-		tgt_out_file = f'{cur_out_dir}/ps-en.en'
+		src_out_file = f'{cur_out_dir}/{lang}-en.{lang}'
+		tgt_out_file = f'{cur_out_dir}/{lang}-en.en'
 		with open(src_out_file, 'w') as f1:
 			f1.write(src_out)
 		with open(tgt_out_file, 'w') as f2:
 			f2.write(tgt_out)
-		write_alignment(cur_out_dir, alignments)
+		write_alignment(cur_out_dir, alignments, lang)
 
 
-def write_alignment(dir, alignments):
+def write_alignment(dir, alignments, lang):
 	out = []
 	for item in alignments:
 		src_idx, tgt_idx = item[0], item[1]
@@ -134,15 +136,21 @@ def write_alignment(dir, alignments):
 			out_line = "{0}:{1}".format(list(src_idx), list(tgt_idx))
 			out.append(out_line)
 	align_out = '\n'.join(out) + '\n'
-	align_out_file = f"{dir}/ps-en.psen"
+	align_out_file = f"{dir}/{lang}-en.{lang}en"
 	with open(align_out_file, 'w') as f:
 		f.write(align_out)
 
+def parse_args():
+	parser = argparse.ArgumentParser(__doc__)
+	parser.add_argument('--dev-src-dir', type=str, required=True)
+	parser.add_argument('--dev-tgt-dir', type=str, required=True)
+	parser.add_argument('--train-src-dir', type=str, required=True)
+	parser.add_argument('--train-tgt-dir', type=str, required=True)
+	parser.add_argument('--output-dir', type=str, required=True)
+	parser.add_argument('--lang', type=str, default="ps")
+	args = parser.parse_args()
+	return args
 
 if __name__ == '__main__':
-	dev_src_dir = "/home/steven/Code/GITHUB/rl_align/dataset/ps/dev.ps-en.ps"
-	dev_tgt_dir = "/home/steven/Code/GITHUB/rl_align/dataset/ps/dev.ps-en.en"
-	train_src_dir = "/home/steven/Code/GITHUB/rl_align/dataset/ps/laser/train.ps-en.ps"
-	train_tgt_dir = "/home/steven/Code/GITHUB/rl_align/dataset/ps/laser/train.ps-en.en"
-	output_dir = "/home/steven/Code/GITHUB/rl_align/dataset/ps/pseudo-align"
-	main(dev_src_dir, dev_tgt_dir, train_src_dir, train_tgt_dir, output_dir)
+	args = parse_args()
+	main(args.dev_src_dir, args.dev_tgt_dir, args.train_src_dir, args.train_tgt_dir, args.output_dir, args.lang)

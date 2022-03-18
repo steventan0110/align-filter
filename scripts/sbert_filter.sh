@@ -19,7 +19,7 @@ Embed () {
   sbert_epochs=1
   window_size=6
   neg_samples=6
-  SBERT_CHECKPOINT_FOLDER=${CHECKPOINT}/align/${lang}/${sbert_model_name}-${sbert_epochs}-${window_size}-${neg_samples}
+  SBERT_CHECKPOINT_FOLDER=${CHECKPOINT}/align/${lang}/${sbert_model_name}-${sbert_epochs}-${window_size}-${neg_samples}-100000
   python ${ROOT}/util/align/sbert_embed.py --input ${txt} --output ${embed} \
     --mode finetune --model-dir ${SBERT_CHECKPOINT_FOLDER}
 }

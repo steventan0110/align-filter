@@ -8,8 +8,13 @@ import numpy as np
 import argparse
 
 def load_data(dir):
+	data = []
 	with open(dir, 'r') as f:
-		return f.read().split('\n')
+		for line in f:
+			if len(line.strip()) < 1 or len(line.strip()) > 512:
+				continue
+			data.append(line.strip())
+	return data
 
 def get_data_from_idx(src_sent, tgt_sent, src_idx, tgt_idx, n_neighbor):
 	src_out = []
@@ -71,15 +76,15 @@ def prepare_feature(src_sents, tgt_sents, alignment, window_size, neg_samples):
 			tgt_idx += 1
 	return data
 
-def assemble_data_feaure(src_sent, tgt_sent, alignment, window_size, neg_samples):
+def assemble_data_feaure(src_sent, tgt_sent, alignment, window_size, neg_samples, num_samples):
 	# first prepare contrastive sentences
 	assert len(src_sent) == len(tgt_sent) # same number of files are passed in
 	train_samples = []
 	for i in range(len(src_sent)):
 		cur_alignment = alignment[i] if alignment is not None else None
 		data = prepare_feature(src_sent[i], tgt_sent[i], cur_alignment, window_size, neg_samples)
-		if len(data) > 100000:
-			data = random.choices(data, k=100000)
+		if len(data) > num_samples:
+			data = random.choices(data, k=num_samples)
 		# data is structured data with premise and hyp
 		for row in tqdm(data):
 			train_samples.append(InputExample(
@@ -93,7 +98,7 @@ class BERTFintune:
 		pass
 
 class STFinetune:
-	def __init__(self, src_data_dir, tgt_data_dir, alignment, checkpoint_dir, epochs):
+	def __init__(self, src_data_dir, tgt_data_dir, alignment, checkpoint_dir, epochs, num_samples):
 		# init dirs
 		self.src_data_dir = src_data_dir.split(', ')
 		self.tgt_data_dir = tgt_data_dir.split(', ')
@@ -105,16 +110,19 @@ class STFinetune:
 		self.neg_samples = 6
 		self.epochs = epochs
 		self.batch_size = 4
+		self.num_samples = num_samples
 		# self.model_card = 'bert-base-uncased'
 		self.model_card = 'bert-base-multilingual-cased'
 		# self.model_card = 'roberta-base'
-		self.output_path = f'{self.checkpoint_dir}/{self.model_card}-{self.epochs}-{self.window_size}-' \
-		                   f'{self.neg_samples}'
+		# self.output_path = f'{self.checkpoint_dir}/{self.model_card}-{self.epochs}-{self.window_size}-' \
+		#                    f'{self.neg_samples}' # checkpoint pass in already has the config
+		self.output_path = f'{self.checkpoint_dir}'
 		# prepare training features
 		self.src_sent = [load_data(src_dir) for src_dir in self.src_data_dir]
 		self.tgt_sent = [load_data(tgt_dir) for tgt_dir in self.tgt_data_dir]
 		self.train_samples = assemble_data_feaure(self.src_sent, self.tgt_sent, self.alignment,
-		                                          window_size=self.window_size, neg_samples=self.neg_samples)
+		                                          window_size=self.window_size, 
+												  neg_samples=self.neg_samples, num_samples=self.num_samples)
 		self.loader = datasets.NoDuplicatesDataLoader(self.train_samples, batch_size=self.batch_size)
 		# prepare model
 		self.bert = models.Transformer(self.model_card)
@@ -172,6 +180,7 @@ def parse_args():
 	parser.add_argument('--alignment', type=str, default=None)
 	parser.add_argument('--checkpoint-dir', type=str)
 	parser.add_argument('--epochs', type=int)
+	parser.add_argument('--num-samples', type=int, default=10000)
 	args = parser.parse_args()
 	return args
 
@@ -182,5 +191,6 @@ if __name__ == '__main__':
 		args.tgt_data_dir,
 		args.alignment,
 		args.checkpoint_dir,
-		args.epochs
+		args.epochs,
+		args.num_samples
 	)

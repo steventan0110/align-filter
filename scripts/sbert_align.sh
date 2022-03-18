@@ -8,10 +8,11 @@ CONCAT_DEDUP=true
 
 if [[ ! -e ${SBERT_CHECKPOINT_FOLDER} ]]; then
   mkdir -p $SBERT_CHECKPOINT_FOLDER
-  # finetune the model for alignment
+  echo "finetune the sbert model for alignment"
   python ${ROOT}/code/align/finetune.py \
     --src-data-dir ${DATASET}/wmt/${lang}/train.${lang}-en.${lang} \
     --tgt-data-dir ${DATASET}/wmt/${lang}/train.${lang}-en.en \
+    --num-samples ${sbert_num_samples} \
     --checkpoint-dir ${SBERT_CHECKPOINT_FOLDER} --epochs ${sbert_epochs}
 else
   echo "SBERT is already finetuned"
