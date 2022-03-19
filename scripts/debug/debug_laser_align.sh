@@ -1,6 +1,15 @@
 # debug the issue that LASER sometimes give CUDA error for certain files
-source ~/anaconda3/etc/profile.d/conda.sh
-source ${HOME}/Code/GITHUB/align-filter/scripts/config/local_config.sh
+if [[ ${HOME} == '/home/wtan12' ]]; then
+  echo "execute clsp environment"
+  source /home/gqin2/scripts/acquire-gpu
+  source ~/miniconda3/etc/profile.d/conda.sh
+  source ${HOME}/align-filter/scripts/config/clsp_config.sh
+else
+  echo "execute home environment"
+  source ~/anaconda3/etc/profile.d/conda.sh
+  source ${HOME}/Code/GITHUB/align-filter/scripts/config/local_config.sh
+fi
+
 conda activate align
 
 Embed () {
@@ -18,5 +27,5 @@ Embed () {
     --verbose
 }
 
-laser_file=${SCRIPT}/debug/bin-132.ps.overlap
+laser_file=${DATASET}/sentence-align/ps/laser/bin-321.en.overlap
 Embed ps ${laser_file} ${laser_file}.emb laser

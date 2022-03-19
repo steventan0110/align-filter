@@ -32,7 +32,7 @@ def retrieve_embedding(params):
 			dtype=np.float32, count=-1)
 		if len(en_embed) == 0 or len(other_embed) == 0:
 			# some cuda error occurs for this bin, ignore the embedding
-			# print("encounter empty embedding file for bin-{0}".format(bin_idx))
+			print("encounter empty embedding file for bin-{0}".format(bin_idx))
 			continue
 
 		en_size = en_embed.shape[0] // en_total_len
