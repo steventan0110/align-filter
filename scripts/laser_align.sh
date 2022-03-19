@@ -15,7 +15,7 @@ Embed () {
   embed=$3
   prefix=$4
   # laser embed
-  rm ${embed}.${prefix}
+  #rm ${embed}.${prefix}
   cat ${txt} | python3 ${LASER}/source/embed.py \
     --encoder ${laser_encoder} \
     --token-lang ${ll} \
@@ -26,6 +26,7 @@ Embed () {
 
 # retrieve every single document and align them with vecalign
 temp_dir=${aligned_dir}
+rm -r ${temp_dir}
 if [[ -e ${temp_dir} ]]; then
   echo " already performed laser align "
   exit

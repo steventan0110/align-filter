@@ -31,7 +31,7 @@ else
   export alignment_type=wmt-align
   echo "do nothing for no alignment option" # this is using wmt released data
 fi
-
+exit
 conda activate crawl
 deduped_file=${aligned_dir}/train.${lang}-en
 if [[ ! -e ${deduped_file}.filter ]]; then # filter by lang id and coverage
