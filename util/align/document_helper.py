@@ -56,29 +56,28 @@ def main(args):
 		# decode the documents and store them into temp folder
 		bin_size = 1000 # clean memory per 1000 files
 		with open(args.input, 'r') as f:
-			data = f.read()
-		file_counter = 0
-		for i, line in enumerate(data.split('\n')):
-			if len(line.strip()) < 1: continue
-			if file_counter != 0 and file_counter % bin_size == 0:
-				with mp.Pool(args.n_cpu) as mpp:
-					mpp.map(save_doc, buckets)
-				buckets =  [(_, []) for _ in range(bucket_size)]
-			bucket_id = file_counter % bucket_size
-			en_url, other_url, en, other = line.split('\t')
-			en = base64.b64decode(en).decode('utf-8')
-			other = base64.b64decode(other).decode('utf-8')
-			en_out, other_out = filter_long(en, other)
-			if len(en_out) == 0 or len(other_out) == 0: continue
-			en = '\n'.join(en_out) + '\n'
-			other = '\n'.join(other_out) + '\n'
-			en_doc_name = f"{args.output_dir}/{file_counter}.en"
-			other_doc_name = f"{args.output_dir}/{file_counter}.{args.lang}"
-			buckets[bucket_id][-1].append((en, other, en_doc_name, other_doc_name))
-			file_counter += 1
-			#if file_counter == 10: break
-		with mp.Pool(args.n_cpu) as mpp:
-			mpp.map(save_doc, buckets)
+			file_counter = 0
+			for line in f:
+				if len(line.strip()) < 1: continue
+				if file_counter != 0 and file_counter % bin_size == 0:
+					with mp.Pool(args.n_cpu) as mpp:
+						mpp.map(save_doc, buckets)
+					buckets =  [(_, []) for _ in range(bucket_size)]
+				bucket_id = file_counter % bucket_size
+				en_url, other_url, en, other = line.split('\t')
+				en = base64.b64decode(en).decode('utf-8')
+				other = base64.b64decode(other).decode('utf-8')
+				en_out, other_out = filter_long(en, other)
+				if len(en_out) == 0 or len(other_out) == 0: continue
+				en = '\n'.join(en_out) + '\n'
+				other = '\n'.join(other_out) + '\n'
+				en_doc_name = f"{args.output_dir}/{file_counter}.en"
+				other_doc_name = f"{args.output_dir}/{file_counter}.{args.lang}"
+				buckets[bucket_id][-1].append((en, other, en_doc_name, other_doc_name))
+				file_counter += 1
+				if file_counter == 10: break
+			with mp.Pool(args.n_cpu) as mpp:
+				mpp.map(save_doc, buckets)
 	else:
 		# assemble the documents and align them according to alignment file from vecalign
 		n_files = len([name for name in os.listdir(args.input)])
