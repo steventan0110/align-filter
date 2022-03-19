@@ -30,10 +30,10 @@ def retrieve_embedding(params):
 		other_embed = np.fromfile(
 			os.path.join(data_dir, f'bin-{bin_idx}.{lang}.overlap.emb.{prefix}'),
 			dtype=np.float32, count=-1)
-                if len(en_embed) == 0 or len(other_embed) == 0:
-                    # some cuda error occurs for this bin, ignore the embedding
-                    print("encounter empty embedding file for bin-{0}".format(bin_idx)) 
-                    continue
+		if len(en_embed) == 0 or len(other_embed) == 0:
+			# some cuda error occurs for this bin, ignore the embedding
+			# print("encounter empty embedding file for bin-{0}".format(bin_idx))
+			continue
 
 		en_size = en_embed.shape[0] // en_total_len
 		en_embed = en_embed.reshape((-1, en_size))

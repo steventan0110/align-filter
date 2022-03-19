@@ -18,5 +18,5 @@ Embed () {
     --verbose
 }
 
-laser_file=${SCRIPT}/debug/bin-86.ps.overlap
+laser_file=${SCRIPT}/debug/bin-132.ps.overlap
 Embed ps ${laser_file} ${laser_file}.emb laser
