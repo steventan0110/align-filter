@@ -75,7 +75,7 @@ def main(args):
 				other_doc_name = f"{args.output_dir}/{file_counter}.{args.lang}"
 				buckets[bucket_id][-1].append((en, other, en_doc_name, other_doc_name))
 				file_counter += 1
-				if file_counter == 10: break
+				#if file_counter == 10: break
 			with mp.Pool(args.n_cpu) as mpp:
 				mpp.map(save_doc, buckets)
 	else:

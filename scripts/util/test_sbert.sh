@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # (See qsub section for explanation on these flags.)
-#$ -N test-sbert-km
+#$ -N test-sbert-km-40k
 #$ -j y -o $JOB_NAME-$JOB_ID.out
 #$ -M wtan12@jhu.edu
 #$ -m e
@@ -86,7 +86,8 @@ for folder in ${output_dir}/0*; do
     python ${VECALIGN_DIR}/overlap.py -i ${folder}/${lang}-en.${lang} -o ${folder}/${lang}-en.${lang}.overlap -n 10
     python ${VECALIGN_DIR}/overlap.py -i ${folder}/${lang}-en.en -o ${folder}/${lang}-en.en.overlap -n 10
   fi
-
+  rm ${folder}/${lang}-en.${lang}.overlap.emb.*
+  rm ${folder}/${lang}-en.en.overlap.emb.*
   if [[ ! -e ${folder}/${lang}-en.${lang}.overlap.emb.laser ]]; then
     LASER_Embed ${lang} ${folder}/${lang}-en.${lang}.overlap ${folder}/${lang}-en.${lang}.overlap.emb laser
     LASER_Embed en ${folder}/${lang}-en.en.overlap ${folder}/${lang}-en.en.overlap.emb laser
