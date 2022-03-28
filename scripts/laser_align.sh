@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 PREPARE_DOC=false
 COMPUTE_EMBED=false
-DIVIDE_EMBED=true
-RETRIEVE_ALIGN=true
-CONCAT_DEDUP=true
+DIVIDE_EMBED=false
+RETRIEVE_ALIGN=false
+CONCAT_DEDUP=false
 
 waitforjobs() {
     while test $(jobs -p | wc -w) -ge "$1"; do wait -n; done
@@ -27,10 +27,10 @@ Embed () {
 # retrieve every single document and align them with vecalign
 temp_dir=${aligned_dir}
 #rm -r ${temp_dir}
-#if [[ -e ${temp_dir} ]]; then
-#  echo " already performed laser align "
-#  exit
-#fi
+if [[ -e ${temp_dir} ]]; then
+  echo " already performed laser align "
+  exit
+fi
 mkdir -p ${temp_dir}
 if $PREPARE_DOC; then
   python ${ROOT}/util/align/document_helper.py \

@@ -3,10 +3,10 @@
 source /home/wtan12/align-filter/scripts/config/clsp_config.sh
 lang=ps
 resources='hostname=c*,mem_free=20G,ram_free=20G,gpu=1'
-for alignment_method in "sbert-align" ; do
+for alignment_method in "laser-align" ; do
   #for filter_method in "laser" "sbert" "roberta"; do
   for filter_method in "roberta"; do
-    for subsample in 2 3 5 7; do
+    for subsample in 2 5 7; do
     #for subsample in 2; do
       qsub -l $resources \
         -N pretrain-${alignment_method}-${filter_method}-${subsample} -j y \

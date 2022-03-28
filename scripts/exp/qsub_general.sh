@@ -7,7 +7,7 @@ if [[ ${HOME} == '/home/wtan12' ]]; then
   qsub \
   	  -l $resources \
   	  -N $job -j y \
-  	  -o $HOME/qsub/$job.out \
+  	  -o $HOME/qsub/$job-$JOB_ID.out \
   	  ${HOME}/align-filter/scripts/main.sh ${alignment_method} ${filter_method} $lang
 else
   # execute home environment

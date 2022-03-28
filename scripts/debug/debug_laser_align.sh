@@ -26,6 +26,7 @@ Embed () {
     --output ${embed}.${prefix} \
     --verbose
 }
-
-laser_file=${DATASET}/sentence-align/ps/laser/bin-321.en.overlap
+for id in 65 86 131 132 377; do
+laser_file=${DATASET}/sentence-align/ps/laser/bin-${id}.ps.overlap
 Embed ps ${laser_file} ${laser_file}.emb laser
+done
