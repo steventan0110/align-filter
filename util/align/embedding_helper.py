@@ -25,19 +25,21 @@ def retrieve_embedding(params):
 		return  # no workload for this cpu
 	for item in content:  # each item corresponds for jobs for one bin
 		bin_idx, lang, en_total_len, other_total_len, jobs, prefix = item
-		print(f'bin-{bin_idx}.en.overlap.emb.{prefix}')
-		en_embed = np.fromfile(
-			os.path.join(data_dir, f'bin-{bin_idx}.en.overlap.emb.{prefix}'),
-			dtype=np.float32, count=-1)
-		# load bin embed which is shared across jobs
-		other_embed = np.fromfile(
-			os.path.join(data_dir, f'bin-{bin_idx}.{lang}.overlap.emb.{prefix}'),
-			dtype=np.float32, count=-1)
+		print(f'Sanity Check for bin-{bin_idx}.en.overlap.emb.{prefix}')
+		en_file_path = os.path.join(data_dir, f'bin-{bin_idx}.en.overlap.emb.{prefix}')
+		other_file_path = os.path.join(data_dir, f'bin-{bin_idx}.{lang}.overlap.emb.{prefix}')
+		if os.path.exists(en_file_path) and os.path.exists(other_file_path):
+			en_embed = np.fromfile(en_file_path,dtype=np.float32, count=-1)
+			# load bin embed which is shared across jobs
+			other_embed = np.fromfile(other_file_path, dtype=np.float32, count=-1)
+		else:
+			print("encounter non exists embedding file, skip")
+			continue
 		if len(en_embed) == 0 or len(other_embed) == 0:
 			# some cuda error occurs for this bin, ignore the embedding
 			print("encounter empty embedding file for bin-{0}".format(bin_idx))
 			continue
-
+		print(f'Process bin-{bin_idx}.en.overlap.emb.{prefix}')
 		en_size = en_embed.shape[0] // en_total_len
 		en_embed = en_embed.reshape((-1, en_size))
 		other_size = other_embed.shape[0] // other_total_len

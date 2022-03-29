@@ -62,3 +62,15 @@ for other_id in "${b[@]}"; do
   Embed ${lang} ${laser_file} ${laser_file}.emb laser
 done
 
+# ----------- WORST CASE DO EVERYTHING LOCALLY ---------------------
+##python ${SCRIPT}/debug/redo_laser.py --out-file ${HOME}/qsub/km-LASER-align-LASER-filter.out --lang en > ${HOME}/temp.txt
+#python ${SCRIPT}/debug/redo_laser.py --out-file /home/steven/Code/GITHUB/align-filter/scripts/debug/km-LASER-align-LASER-filter.out --lang en > temp.txt
+#readarray -t a < temp.txt
+#for en_id in "${a[@]}"; do
+#  echo "processing $en_id-bin en"
+#  laser_file=/export/c07/wtan12/dataset/sentence-align/${lang}/laser/bin-${en_id}.en.overlap
+#  scp -o StrictHostKeyChecking=no wtan12@login.clsp.jhu.edu:$laser_file .
+#  local_file=/home/steven/Code/GITHUB/align-filter/scripts/debug/bin-${en_id}.en.overlap
+#  Embed en ${local_file} ${local_file}.emb laser
+#  #scp -o StrictHostKeyChecking=no ${local_file}.emb.laser wtan12@login.clsp.jhu.edu:$laser_file.emb.laser
+#done
