@@ -1,4 +1,19 @@
-# debug the issue that LASER sometimes give CUDA error for certain files
+#!/usr/bin/env bash
+
+# (See qsub section for explanation on these flags.)
+#$ -N laser-rerun
+#$ -j y -o $JOB_NAME-$JOB_ID.out
+#$ -M wtan12@jhu.edu
+#$ -m e
+
+# Fill out RAM/memory (same thing) request,
+# the number of GPUs you want,
+# and the hostnames of the machines for special GPU models.
+#$ -l ram_free=10G,mem_free=20G,gpu=1,hostname=c0*|c1[123456789]
+
+# Submit to GPU queue
+#$ -q g.q
+
 lang=km
 if [[ ${HOME} == '/home/wtan12' ]]; then
   echo "execute clsp environment"
