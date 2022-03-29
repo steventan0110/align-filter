@@ -132,6 +132,7 @@ def main(args):
 			buckets[bucket_id][-1].append((bin_idx, args.lang,
 			                               en_total_length, other_total_length,
 			                               work_load, args.prefix))
+		print("Start Dividing Embedding")
 		with mp.Pool(bucket_size) as mpp:
 			mpp.map(retrieve_embedding, buckets)
 
