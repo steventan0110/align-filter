@@ -43,9 +43,9 @@ Embed () {
     --verbose
 }
 
-python ${SCRIPT}/debug/redo_laser.py --out-file ${HOME}/qsub/km-LASER-align-LASER-filter.out --lang en > temp.txt
+python ${SCRIPT}/debug/redo_laser.py --out-file ${HOME}/qsub/km-LASER-align-LASER-filter.out --lang en > ${HOME}/temp.txt
 #python ${SCRIPT}/debug/redo_laser.py --out-file /home/steven/Code/GITHUB/align-filter/scripts/debug/km-LASER-align-LASER-filter.out --lang en > temp.txt
-readarray -t a < temp.txt
+readarray -t a < ${HOME}/temp.txt
 for en_id in "${a[@]}"; do
   echo "processing $en_id-bin en"
   laser_file=${DATASET}/sentence-align/${lang}/laser/bin-${en_id}.en.overlap
@@ -53,9 +53,9 @@ for en_id in "${a[@]}"; do
 done
 
 
-python ${SCRIPT}/debug/redo_laser.py --out-file ${HOME}/qsub/km-LASER-align-LASER-filter.out --lang ${lang} > temp.txt
+python ${SCRIPT}/debug/redo_laser.py --out-file ${HOME}/qsub/km-LASER-align-LASER-filter.out --lang ${lang} > ${HOME}/temp.txt
 #python ${SCRIPT}/debug/redo_laser.py --out-file /home/steven/Code/GITHUB/align-filter/scripts/debug/km-LASER-align-LASER-filter.out --lang ${lang} > temp.txt
-readarray -t b < temp.txt
+readarray -t b < ${HOME}/temp.txt
 for other_id in "${b[@]}"; do
   echo "processing $other_id-bin ${lang}"
   laser_file=${DATASET}/sentence-align/${lang}/laser/bin-${other_id}.${lang}.overlap
