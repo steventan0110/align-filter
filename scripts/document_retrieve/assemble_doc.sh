@@ -11,4 +11,21 @@ fi
 mkdir -p ${OUTPUT_DIR}
 
 python $DATA_ROOT/assemble_doc.py --root ${DATA_ROOT} --lang ${lang} --out ${OUTPUT_DIR}
+wait
 
+all_docs=${OUTPUT_DIR}/${lang}.doc.xz
+rm $all_docs
+readarray -t a < ${OUTPUT_DIR}/doc.txt
+for doc_name in "${a[@]}"; do
+  cat ${doc_name} >> $all_docs
+done
+
+all_sent=${OUTPUT_DIR}/${lang}.sent.xz
+rm $all_sent
+readarray -t b < ${OUTPUT_DIR}/sent.txt
+for sent_name in "${b[@]}"; do
+  cat ${sent_name} >> $all_sent
+done
+
+xz --decompress $all_docs
+xz --decompress $all_sent

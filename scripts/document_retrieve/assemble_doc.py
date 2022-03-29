@@ -6,9 +6,13 @@ def main(args):
 	all_dir = []
 	for _, subdirs, _ in os.walk(args.root):
 		for subdir in subdirs:
+			print("Processing subdir ", subdir)
 			find_related_dirs(os.path.join(args.root, subdir), args.lang, all_dir)
-	print(len(all_dir))
-
+		break
+	with open(f'{args.out}/doc.txt', 'w') as f1, open(f'{args.out}/sent.txt', 'w') as f2:
+		for temp in all_dir:
+			f1.write(f'{temp}/v2.en-{args.lang}.docs.xz\n')
+			f2.write(f'{temp}/v2.en-{args.lang}.sent.xz\n')
 
 
 def find_related_dirs(path, lang, all_dir):
