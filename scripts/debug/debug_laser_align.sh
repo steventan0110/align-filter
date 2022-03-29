@@ -1,4 +1,5 @@
 # debug the issue that LASER sometimes give CUDA error for certain files
+lang=km
 if [[ ${HOME} == '/home/wtan12' ]]; then
   echo "execute clsp environment"
   source /home/gqin2/scripts/acquire-gpu
@@ -26,7 +27,23 @@ Embed () {
     --output ${embed}.${prefix} \
     --verbose
 }
-for id in 65 86 131 132 377; do
-laser_file=${DATASET}/sentence-align/ps/laser/bin-${id}.ps.overlap
-Embed ps ${laser_file} ${laser_file}.emb laser
+
+python ${SCRIPT}/debug/redo_laser.py --out-file ${HOME}/qsub/km-LASER-align-LASER-filter.out --lang en > temp.txt
+#python ${SCRIPT}/debug/redo_laser.py --out-file /home/steven/Code/GITHUB/align-filter/scripts/debug/km-LASER-align-LASER-filter.out --lang en > temp.txt
+readarray -t a < temp.txt
+for en_id in "${a[@]}"; do
+  echo "processing $en_id-bin en"
+  laser_file=${DATASET}/sentence-align/${lang}/laser/bin-${en_id}.en.overlap
+  Embed en ${laser_file} ${laser_file}.emb laser
 done
+
+
+python ${SCRIPT}/debug/redo_laser.py --out-file ${HOME}/qsub/km-LASER-align-LASER-filter.out --lang ${lang} > temp.txt
+#python ${SCRIPT}/debug/redo_laser.py --out-file /home/steven/Code/GITHUB/align-filter/scripts/debug/km-LASER-align-LASER-filter.out --lang ${lang} > temp.txt
+readarray -t b < temp.txt
+for other_id in "${b[@]}"; do
+  echo "processing $other_id-bin ${lang}"
+  laser_file=${DATASET}/sentence-align/${lang}/laser/bin-${other_id}.${lang}.overlap
+  Embed ${lang} ${laser_file} ${laser_file}.emb laser
+done
+

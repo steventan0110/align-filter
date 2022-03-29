@@ -9,18 +9,21 @@ import shutil
 
 from subprocess import check_output
 
+
 def wc(filename):
 	return int(check_output(["wc", "-l", filename]).split()[0])
+
 
 def save_embed(filename, embed):
 	with open(filename, 'w') as f:
 		embed.tofile(f)
 
+
 def retrieve_embedding(params):
 	data_dir, content = params
 	if len(content) == 0:
-		return # no workload for this cpu
-	for item in content: # each item corresponds for jobs for one bin
+		return  # no workload for this cpu
+	for item in content:  # each item corresponds for jobs for one bin
 		bin_idx, lang, en_total_len, other_total_len, jobs, prefix = item
 		print(f'bin-{bin_idx}.en.overlap.emb.{prefix}')
 		en_embed = np.fromfile(
@@ -44,9 +47,10 @@ def retrieve_embedding(params):
 			file_idx, en_length, other_length, en_start_idx, other_start_idx = job
 			en_file = f'{file_idx}.en.overlap.emb.{prefix}'
 			other_file = f'{file_idx}.{args.lang}.overlap.emb.{prefix}'
-			save_embed(os.path.join(data_dir,en_file), en_embed[en_start_idx: (en_start_idx + en_length)])
-			save_embed(os.path.join(data_dir,other_file),
+			save_embed(os.path.join(data_dir, en_file), en_embed[en_start_idx: (en_start_idx + en_length)])
+			save_embed(os.path.join(data_dir, other_file),
 			           other_embed[other_start_idx: (other_start_idx + other_length)])
+
 
 def main(args):
 	if args.mode == "assemble":
@@ -141,6 +145,7 @@ def parse_args():
 	parser.add_argument('--prefix', type=str, default=None, help="prefix for embed name such as laser, sbert, etc.")
 	args = parser.parse_args()
 	return args
+
 
 if __name__ == '__main__':
 	args = parse_args()
