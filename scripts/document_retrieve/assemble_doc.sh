@@ -1,4 +1,4 @@
-lang=fr
+lang=ha
 if [[ ${HOME} == '/home/wtan12' ]]; then
   DATA_ROOT=/home/pkoehn/statmt/data/site-crawl/data/
   SCRIPT=/home/wtan12/align-filter/scripts/document_retrieve/
@@ -10,7 +10,7 @@ else
 fi
 mkdir -p ${OUTPUT_DIR}
 
-python $DATA_ROOT/assemble_doc.py --root ${DATA_ROOT} --lang ${lang} --out ${OUTPUT_DIR}
+python $SCRIPT/assemble_doc.py --root ${DATA_ROOT} --lang ${lang} --out ${OUTPUT_DIR}
 wait
 
 all_docs=${OUTPUT_DIR}/${lang}.doc.xz

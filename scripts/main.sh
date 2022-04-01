@@ -9,7 +9,7 @@ echo "Executing ${ALIGN_METHOD} Align with ${FILTER_METHOD} Filtering for ${lang
 
 if [[ ${HOME} == '/home/wtan12' ]]; then
   echo "execute clsp environment"
-  source /home/gqin2/scripts/acquire-gpu
+  #source /home/gqin2/scripts/acquire-gpu
   source ~/miniconda3/etc/profile.d/conda.sh
   source ${HOME}/align-filter/scripts/config/clsp_config.sh
 else
@@ -31,7 +31,7 @@ else
   export alignment_type=wmt-align
   echo "do nothing for no alignment option" # this is using wmt released data
 fi
-
+exit
 conda activate crawl
 deduped_file=${aligned_dir}/train.${lang}-en
 if [[ ! -e ${deduped_file}.filter ]]; then # filter by lang id and coverage

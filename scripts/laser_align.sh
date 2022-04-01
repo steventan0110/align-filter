@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 PREPARE_DOC=false
 COMPUTE_EMBED=false
-DIVIDE_EMBED=true
-RETRIEVE_ALIGN=false
-CONCAT_DEDUP=false
+DIVIDE_EMBED=false
+RETRIEVE_ALIGN=true
+CONCAT_DEDUP=true
 
 waitforjobs() {
     while test $(jobs -p | wc -w) -ge "$1"; do wait -n; done
@@ -27,10 +27,10 @@ Embed () {
 # retrieve every single document and align them with vecalign
 temp_dir=${aligned_dir}
 #rm -r ${temp_dir}
-if [[ -e ${temp_dir} ]]; then
-  echo " already performed laser align "
-  exit
-fi
+#if [[ -e ${temp_dir} ]]; then
+#  echo " already performed laser align "
+#  exit
+#fi
 mkdir -p ${temp_dir}
 if $PREPARE_DOC; then
   python ${ROOT}/util/align/document_helper.py \
@@ -93,7 +93,7 @@ if $RETRIEVE_ALIGN; then
     other_overlap=${other_file}.overlap
     other_emb=${other_overlap}.emb.${emb_prefix}
     alignment=${id}.en-${lang}
-
+    echo "Vecalign on $id"
     python ${VECALIGN_DIR}/vecalign.py --alignment_max_size 5  \
       --src ${en_file} --tgt ${other_file} \
       --src_embed ${en_overlap} ${en_emb}  \

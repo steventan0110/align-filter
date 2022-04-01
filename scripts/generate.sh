@@ -39,9 +39,9 @@ evaluate () {
 }
 
 conda activate crawl
-for alignment_method in "laser-align"; do
-  for filter_method in "laser" "sbert" "roberta"; do
-  #for filter_method in "roberta"; do
+for alignment_method in "sbert-align"; do
+  #for filter_method in "laser" "sbert" "roberta"; do
+  for filter_method in "roberta"; do
     for subsample in 2 3 5 7; do
       evaluate ${alignment_method} ${filter_method} ${subsample} valid
       wait
