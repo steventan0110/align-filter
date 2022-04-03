@@ -6,9 +6,7 @@ export sbert_epochs=1
 export window_size=6
 export neg_samples=6
 export emb_prefix="train_tune_sbert"
-export sbert_num_samples=100000
+export sbert_num_samples=10000
 export SBERT_CHECKPOINT_FOLDER=${CHECKPOINT}/align/${lang}/${sbert_model_name}-${sbert_epochs}-${window_size}-${neg_samples}-${sbert_num_samples}
 export aligned_dir=${DATASET}/sentence-align/${lang}/sbert
 export alignment_type=sbert-align
-
-# bin 321.en 131ps 377ps 65ps 86ps

@@ -7,14 +7,24 @@ from tqdm.auto import tqdm  # so we see progress bar
 import numpy as np
 import argparse
 
-def load_data(dir):
-	data = []
-	with open(dir, 'r') as f:
-		for line in f:
-			if len(line.strip()) < 1 or len(line.strip()) > 512:
+def load_data(src_dir, tgt_dir, score_file):
+	src_data = []
+	tgt_data = []
+	if score_file is not None:
+		# passed in optional score file, use it as pre-filter to remove noisy data
+		with open(score_file, 'r') as f:
+			score_data = f.read().split('\n')
+	with open(src_dir, 'r') as f1, open(tgt_dir, 'r') as f2:
+		for i, (x, y) in enumerate(zip(f1, f2)):
+			if score_file is not None:
+				if float(score_data[i]) < 0.9: continue
+			x = x.strip()
+			y = y.strip()
+			if len(x) < 1 or len(y) < 1 or len(x) > 512 or len(y) > 512:
 				continue
-			data.append(line.strip())
-	return data
+			src_data.append(x)
+			tgt_data.append(y)
+	return src_data, tgt_data
 
 def get_data_from_idx(src_sent, tgt_sent, src_idx, tgt_idx, n_neighbor):
 	src_out = []
@@ -98,10 +108,10 @@ class BERTFintune:
 		pass
 
 class STFinetune:
-	def __init__(self, src_data_dir, tgt_data_dir, alignment, checkpoint_dir, epochs, num_samples):
+	def __init__(self, src_data_dir, tgt_data_dir, alignment, checkpoint_dir, epochs, num_samples, score_file=None):
 		# init dirs
-		self.src_data_dir = src_data_dir.split(', ')
-		self.tgt_data_dir = tgt_data_dir.split(', ')
+		# self.src_data_dir = src_data_dir.split(', ')
+		# self.tgt_data_dir = tgt_data_dir.split(', ')
 		self.alignment = [self.parse_alignment(align_file) for align_file in alignment.split(', ')] \
 			if alignment is not None else None
 		self.checkpoint_dir = checkpoint_dir
@@ -111,16 +121,17 @@ class STFinetune:
 		self.epochs = epochs
 		self.batch_size = 2
 		self.num_samples = num_samples
-		# self.model_card = 'bert-base-uncased'
 		self.model_card = 'bert-base-multilingual-cased'
 		# self.model_card = 'roberta-base'
 		# self.output_path = f'{self.checkpoint_dir}/{self.model_card}-{self.epochs}-{self.window_size}-' \
 		#                    f'{self.neg_samples}' # checkpoint pass in already has the config
 		self.output_path = f'{self.checkpoint_dir}'
 		# prepare training features
-		self.src_sent = [load_data(src_dir) for src_dir in self.src_data_dir]
-		self.tgt_sent = [load_data(tgt_dir) for tgt_dir in self.tgt_data_dir]
-		self.train_samples = assemble_data_feaure(self.src_sent, self.tgt_sent, self.alignment,
+		# self.src_sent = [load_data(src_dir, score_file) for src_dir in self.src_data_dir]
+		# self.tgt_sent = [load_data(tgt_dir, score_file) for tgt_dir in self.tgt_data_dir]
+		self.src_sent, self.tgt_sent = load_data(src_data_dir, tgt_data_dir, score_file)
+		# TODO: fix the hack [] here
+		self.train_samples = assemble_data_feaure([self.src_sent], [self.tgt_sent], self.alignment,
 		                                          window_size=self.window_size, 
 												  neg_samples=self.neg_samples, num_samples=self.num_samples)
 		self.loader = datasets.NoDuplicatesDataLoader(self.train_samples, batch_size=self.batch_size)
@@ -181,6 +192,7 @@ def parse_args():
 	parser.add_argument('--checkpoint-dir', type=str)
 	parser.add_argument('--epochs', type=int)
 	parser.add_argument('--num-samples', type=int, default=10000)
+	parser.add_argument('--score-file', type=str, default=None, help="use score file to filter topk data")
 	args = parser.parse_args()
 	return args
 
@@ -192,5 +204,6 @@ if __name__ == '__main__':
 		args.alignment,
 		args.checkpoint_dir,
 		args.epochs,
-		args.num_samples
+		args.num_samples,
+		args.score_file,
 	)
