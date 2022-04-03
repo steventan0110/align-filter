@@ -60,6 +60,7 @@ if [[ ! -e ${SBERT_CHECKPOINT_FOLDER} ]]; then
     --src-data-dir ${DATASET}/wmt/${lang}/train.${lang}-en.${lang} \
     --tgt-data-dir ${DATASET}/wmt/${lang}/train.${lang}-en.en \
     --num-samples ${sbert_num_samples} \
+    --score-file ${DATASET}/wmt/${lang}/wmt20-sent.en-${lang}.laser-score \
     --checkpoint-dir ${SBERT_CHECKPOINT_FOLDER} --epochs ${sbert_epochs}
 else
   echo "SBERT is already finetuned"
