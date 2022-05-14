@@ -56,11 +56,16 @@ SBERT_Embed () {
 if [[ ! -e ${SBERT_CHECKPOINT_FOLDER} ]]; then
   mkdir -p $SBERT_CHECKPOINT_FOLDER
   echo "finetune the sbert model for alignment"
+#  python ${ROOT}/code/align/finetune.py \
+#    --src-data-dir ${DATASET}/wmt/${lang}/train.${lang}-en.${lang} \
+#    --tgt-data-dir ${DATASET}/wmt/${lang}/train.${lang}-en.en \
+#    --num-samples ${sbert_num_samples} --model-card ${sbert_model_name} \
+#    --score-file ${DATASET}/wmt/${lang}/wmt20-sent.en-${lang}.laser-score \
+#    --checkpoint-dir ${SBERT_CHECKPOINT_FOLDER} --epochs ${sbert_epochs}
   python ${ROOT}/code/align/finetune.py \
-    --src-data-dir ${DATASET}/wmt/${lang}/train.${lang}-en.${lang} \
-    --tgt-data-dir ${DATASET}/wmt/${lang}/train.${lang}-en.en \
-    --num-samples ${sbert_num_samples} \
-    --score-file ${DATASET}/wmt/${lang}/wmt20-sent.en-${lang}.laser-score \
+    --src-data-dir ${ROOT}/scripts/util/train.$lang-en-2.$lang \
+    --tgt-data-dir ${ROOT}/scripts/util/train.${lang}-en-2.en \
+    --num-samples ${sbert_num_samples} --model-card ${sbert_model_name} \
     --checkpoint-dir ${SBERT_CHECKPOINT_FOLDER} --epochs ${sbert_epochs}
 else
   echo "SBERT is already finetuned"
@@ -87,8 +92,8 @@ for folder in ${output_dir}/0*; do
     python ${VECALIGN_DIR}/overlap.py -i ${folder}/${lang}-en.${lang} -o ${folder}/${lang}-en.${lang}.overlap -n 10
     python ${VECALIGN_DIR}/overlap.py -i ${folder}/${lang}-en.en -o ${folder}/${lang}-en.en.overlap -n 10
   fi
-  rm ${folder}/${lang}-en.${lang}.overlap.emb.*
-  rm ${folder}/${lang}-en.en.overlap.emb.*
+  rm ${folder}/${lang}-en.${lang}.overlap.emb.sbert
+  rm ${folder}/${lang}-en.en.overlap.emb.sbert
   if [[ ! -e ${folder}/${lang}-en.${lang}.overlap.emb.laser ]]; then
     LASER_Embed ${lang} ${folder}/${lang}-en.${lang}.overlap ${folder}/${lang}-en.${lang}.overlap.emb laser
     LASER_Embed en ${folder}/${lang}-en.en.overlap ${folder}/${lang}-en.en.overlap.emb laser

@@ -108,7 +108,9 @@ class BERTFintune:
 		pass
 
 class STFinetune:
-	def __init__(self, src_data_dir, tgt_data_dir, alignment, checkpoint_dir, epochs, num_samples, score_file=None):
+	def __init__(self, src_data_dir, tgt_data_dir, model_card,
+	             alignment, checkpoint_dir, epochs, num_samples,
+	             score_file=None):
 		# init dirs
 		# self.src_data_dir = src_data_dir.split(', ')
 		# self.tgt_data_dir = tgt_data_dir.split(', ')
@@ -121,8 +123,7 @@ class STFinetune:
 		self.epochs = epochs
 		self.batch_size = 2
 		self.num_samples = num_samples
-		self.model_card = 'bert-base-multilingual-cased'
-		# self.model_card = 'roberta-base'
+		self.model_card = model_card
 		# self.output_path = f'{self.checkpoint_dir}/{self.model_card}-{self.epochs}-{self.window_size}-' \
 		#                    f'{self.neg_samples}' # checkpoint pass in already has the config
 		self.output_path = f'{self.checkpoint_dir}'
@@ -191,6 +192,7 @@ def parse_args():
 	parser.add_argument('--alignment', type=str, default=None)
 	parser.add_argument('--checkpoint-dir', type=str)
 	parser.add_argument('--epochs', type=int)
+	parser.add_argument('--model-card', type=str, default="bert-base-multilingual-cased")
 	parser.add_argument('--num-samples', type=int, default=10000)
 	parser.add_argument('--score-file', type=str, default=None, help="use score file to filter topk data")
 	args = parser.parse_args()
@@ -201,6 +203,7 @@ if __name__ == '__main__':
 	st_fineune = STFinetune(
 		args.src_data_dir,
 		args.tgt_data_dir,
+		args.model_card,
 		args.alignment,
 		args.checkpoint_dir,
 		args.epochs,

@@ -29,12 +29,12 @@ def main(dev_src_dir, dev_tgt_dir, train_src_dir, train_tgt_dir, output_dir, lan
 
 	possible_weights = [
 		[0.6,0.1,0.1,0.1,0.1], # all combined
-		# [0.7,0.15,0.15,0,0], # only ins
-		# [0.7,0,0,0.15,0.15], #only delete
-		# [0.8,0.2,0,0,0], # ins on src only
-		# [0.8,0,0.2,0,0], # ins on tgt only
-		# [0.8,0,0,0.2,0], # delete on src only
-		# [0.8,0,0,0,0.2] # delete on tgt only
+		[0.7,0.15,0.15,0,0], # only ins
+		[0.7,0,0,0.15,0.15], #only delete
+		[0.8,0.2,0,0,0], # ins on src only
+		[0.8,0,0.2,0,0], # ins on tgt only
+		[0.8,0,0,0.2,0], # delete on src only
+		[0.8,0,0,0,0.2] # delete on tgt only
 	]
 	for assigned_weight in possible_weights:
 		align_weight, ins_src_weight, ins_tgt_weight, delete_src_weight, delete_tgt_weight = assigned_weight

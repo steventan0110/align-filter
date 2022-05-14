@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-PREPARE_DOC=false
-COMPUTE_EMBED=false
-DIVIDE_EMBED=false
+PREPARE_DOC=true
+COMPUTE_EMBED=true
+DIVIDE_EMBED=true
 RETRIEVE_ALIGN=true
 CONCAT_DEDUP=true
 

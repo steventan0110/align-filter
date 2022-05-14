@@ -25,7 +25,7 @@ waitforjobs() {
 Embed() {
   # sbert embed
   python ${ROOT}/util/align/sbert_embed.py \
-    --mode finetune --model-dir ${SBERT_CHECKPOINT_FOLDER} --input-dir $1 --prefix $2 --lang $3
+    --mode finetune --model-dir ${SBERT_CHECKPOINT_FOLDER}-new --input-dir $1 --prefix $2 --lang $3
 }
 
 # retrieve every single document and align them with vecalign
