@@ -8,7 +8,7 @@ else
   source ~/anaconda3/etc/profile.d/conda.sh
   source ${HOME}/Code/GITHUB/align-filter/scripts/config/local_config.sh
 fi
-lang=ne
+lang=ha
 assemble_dir=${OUTPUT}/assemble_doc/${lang}
 sent_file=${assemble_dir}/en-${lang}
 sent_file_dedup=${sent_file}.dedup
@@ -18,7 +18,7 @@ if [[ ! -e ${sent_file} ]]; then
   cat ${assemble_dir}/$lang.sent | cut -f3 > ${assemble_dir}/en-$lang.en
   cat ${assemble_dir}/$lang.sent | cut -f4 > ${assemble_dir}/en-$lang.$lang
   paste ${assemble_dir}/en-$lang.en ${assemble_dir}/en-$lang.$lang > ${sent_file}
-  ${THIRD_PARTY}/preprocess/build/bin/dedupe < ${sent_file} > ${sentsent_file_dedup_file}
+  ${THIRD_PARTY}/preprocess/build/bin/dedupe < ${sent_file} > ${sent_file_dedup}
 fi
 
 if [[ ! -e ${sent_file_dedup}.filter ]]; then # filter by lang id and coverage
