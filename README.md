@@ -13,4 +13,11 @@ This is a repository that performs sentence alignment and sentence filtering for
 ````
 
 ## Citation (Bibtex)
-To be added
+@misc{tan2022bitext,
+      title={Bitext Mining for Low-Resource Languages via Contrastive Learning}, 
+      author={Weiting Tan and Philipp Koehn},
+      year={2022},
+      eprint={2208.11194},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
