@@ -6,13 +6,14 @@ This is a repository that performs sentence alignment and sentence filtering for
 ````
 -- code:
   -- algin: code that fine-tunes sentence-BERT (or other pre-trained models) with Multiple Negatives Ranking Loss
-  -- filter: Modified version of XLM-Roberta fine-tune from HUAWEI's [submission](https://aclanthology.org/2020.wmt-1.105.pdf) to WMT2020
+  -- filter: Modified version of XLM-Roberta fine-tune from HUAWEI's submission (https://aclanthology.org/2020.wmt-1.105.pdf) to WMT2020
 -- scripts: scripts used to perform various experiments for sentence alignment and filtering.
   -- main.sh: entry point (execute this to execute the whole alignment and filtering pipeline)
 -- util: scripts for visualization or computing text statistics. Also contains important python files used by scripts folder to perform parallel computation (for sentence alignment)
 ````
 
 ## Citation (Bibtex)
+````
 @misc{tan2022bitext,
       title={Bitext Mining for Low-Resource Languages via Contrastive Learning}, 
       author={Weiting Tan and Philipp Koehn},
@@ -21,3 +22,4 @@ This is a repository that performs sentence alignment and sentence filtering for
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }
+````
